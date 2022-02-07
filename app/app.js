@@ -1,7 +1,14 @@
 const express = require('express')
 const app = express()
+
 const sqlite3 = require('sqlite3')
 const dbPath = "app/db/database.sqlite3"
+
+// Build WEB Server
+const path = require('path')
+    // set static root directory
+app.use(express.static(path.join(__dirname, 'public')))
+
 
 // Get all users
 app.get('/api/v1/users',(req, res) => {

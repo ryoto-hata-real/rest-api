@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>REST-API Test</title>
+    <!-- Load Scripts -->
+    <script src="js/users.js" defer></script>
+    <script src="js/search.js" defer></script>
+    <script src="js/index.js" defer></script>
+</head>
+<body>
+    <main>
+        <h1>SNSユーザー管理</h1>
+        <label for="search">ユーザー名で検索</label>
+        <input type="text" id="search">
+        <button id="search-btn">検索</button>
+        <table>
+            <thead>
+                <th>ID</th>
+                <th>ユーザー名</th>
+                <th>プロフィール</th>
+                <th>誕生日</th>
+                <th>登録日時</th>
+                <th>更新日時</th>
+            </thead>
+            <tbody id="users-list">
+
+            </tbody>
+        </table>
+    </main>
+</body>
+
+</html>
