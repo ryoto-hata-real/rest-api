@@ -132,7 +132,72 @@ const run = async (sql, db) =>{
     })
 }
 
+// get following user list
+app.get('/api/v1/users/:id/following',(req, res) => {
+    const db = new sqlite3.Database(dbPath)
+    const id = req.params.id
 
+    db.all(`SELECT * FROM following f LEFT JOIN users u ON f.followed_id = u.id WHERE f.following_id = ${id};`, (err, rows) => {
+        if(!rows){
+            res.status(404).json({status:404,error:"Not Found"})
+        }else{
+            res.json(rows)
+        }
+        
+    })
+
+    db.close()
+})
+
+// get followed user list
+app.get('/api/v1/users/:id/followed',(req, res) => {
+    const db = new sqlite3.Database(dbPath)
+    const id = req.params.id
+
+    db.all(`SELECT * FROM following f LEFT JOIN users u ON f.following_id = u.id WHERE f.followed_id = ${id};`, (err, rows) => {
+        if(!rows){
+            res.status(404).json({status:404,error:"Not Found"})
+        }else{
+            res.json(rows)
+        }
+        
+    })
+
+    db.close()
+})
+
+// Follow a new User
+app.post('/api/v1/users/:following_id/follow/:followed_id', async (req, res) => {
+
+    const db = new sqlite3.Database(dbPath)
+    const following_id = req.params.following_id
+    const followed_id = req.params.followed_id
+
+    
+    try {
+        await run(`INSERT INTO following (following_id, followed_id) VALUES ("${following_id}", "${followed_id}")`, db)
+        res.status(201).json({status:201, message:"フォロー成功"})
+    } catch (e){
+        res.status(500).json({status:500, error:e})
+    }
+    db.close()
+})
+
+// UnFollow a new User
+app.delete('/api/v1/users/:following_id/unfollow/:followed_id', async (req, res) => {
+
+    const db = new sqlite3.Database(dbPath)
+    const following_id = req.params.following_id
+    const followed_id = req.params.followed_id
+
+    try {
+        await run(`DELETE FROM following WHERE following_id=${following_id} AND followed_id=${followed_id}`, db)
+        res.status(201).json({status:201, message:"フォロー解除"})
+    } catch (e){
+        res.status(500).json({status:500, error:e})
+    }
+    db.close()
+})
 const port = process.env.PORT || 3000;
 app.listen(port)
 console.log("Listen on port : " + port)
